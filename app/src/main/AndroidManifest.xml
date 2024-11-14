@@ -1,22 +1,46 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.vuzix.connectivitysdksample">
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="false"
-        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Base.Theme.Linkapp"
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
+        <!--provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="@string/provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider-->
 
-        <activity android:name=".MainActivity" android:label="@string/activity_name">
+        <activity android:name=".CameraApp"
+            android:exported="true"/>
+        <activity android:name=".MainActivitytwo" android:label="@string/activity_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <receiver android:name=".GetReceiver" tools:ignore="ExportedReceiver">
+        <receiver android:name=".GetReceiver" tools:ignore="ExportedReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.vuzix.connectivitysdksample.GET"/>
             </intent-filter>

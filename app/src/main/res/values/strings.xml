@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Vuzix Connectivity SDK Sample</string>
+    <string name="app_name">Vuzix blade</string>
     <string name="activity_name">SDK Sample</string>
     <string name="not_available">Connectivity is not available!</string>
     <string name="type_some_text">Type some text</string>
