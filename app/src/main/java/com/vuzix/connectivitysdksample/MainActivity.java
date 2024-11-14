@@ -25,8 +25,8 @@ public class MainActivity extends Activity {
 
     private static final String ACTION_SEND = "com.vuzix.connectivitysdksample.SEND";
     private static final String ACTION_GET = "com.vuzix.connectivitysdksample.GET";
-
     private static final String EXTRA_TEXT = "text";
+    private static final String Image = "Image";
 
     private EditText mEditText;
      ImageView imageView;
@@ -51,14 +51,13 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Drawable drawable = getResources().getDrawable(R.drawable.samplepic);
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
                 Intent sendIntent = new Intent(ACTION_SEND);
                 sendIntent.setPackage("com.vuzix.connectivitysdksample");
-
-                sendIntent.putExtra(EXTRA_TEXT, byteArray);
+                sendIntent.putExtra(Image, byteArray);
+               // sendBroadcast(sendIntent);
                 Connectivity.get(MainActivity.this).sendBroadcast(sendIntent);
                 mEditText.setText(null);
             }
@@ -81,6 +80,7 @@ public class MainActivity extends Activity {
         Intent sendIntent = new Intent(ACTION_SEND);
         sendIntent.setPackage("com.vuzix.connectivitysdksample");
         sendIntent.putExtra(EXTRA_TEXT, mEditText.getText().toString());
+        //sendBroadcast(sendIntent);
         Connectivity.get(this).sendBroadcast(sendIntent);
         mEditText.setText(null);
     }
@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
                 if (text != null) {
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 }
-                byte[] byteArray =intent.getByteArrayExtra("message");
+                byte[] byteArray =intent.getByteArrayExtra(Image);
                   if(byteArray!=null) {
                       Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                       imageView.setImageBitmap(bitmap);
