@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
     private static final String ACTION_GET = "com.vuzix.connectivitysdksample.GET";
     private static final String EXTRA_TEXT = "text";
     private static final String Image = "Image";
-
+     //vuzix
     private EditText mEditText;
      ImageView imageView;
      Button sendimage;
