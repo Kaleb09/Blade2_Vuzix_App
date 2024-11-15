@@ -3,9 +3,15 @@ package com.vuzix.connectivitysdksample;
 
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,10 +33,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.vuzix.connectivity.sdk.Connectivity;
+import com.vuzix.connectivity.sdk.Device;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainActivitytwo extends AppCompatActivity {
     int WRITE_EXTERNAL_STORAGE =1;
-
+    private static final String ACTION_SEND = "com.vuzix.connectivitysdksample.SEND";
+    private static final String ACTION_GET = "com.vuzix.connectivitysdksample.GET";
+    private static final String EXTRA_TEXT = "text";
+    private static final String Image = "Image";
+    //phone
+    private EditText mEditText;
     ImageView imageView;
     Button sendimage;
     public static ProgressBar progressBar;
@@ -122,9 +136,25 @@ public class MainActivitytwo extends AppCompatActivity {
 
             }
         });
-       /* if (c.isConnected()) {
-            // Proceed with sending/receiving data
-        }*/
+        mEditText = findViewById(R.id.text);
+        sendimage = findViewById(R.id.sendimage);
+        imageView = findViewById(R.id.imageView);
+        sendimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Drawable drawable = getResources().getDrawable(R.drawable.samplepic);
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                Intent sendIntent = new Intent(ACTION_SEND);
+                sendIntent.setPackage("com.vuzix.connectivitysdksample");
+                sendIntent.putExtra(Image, byteArray);
+                // sendBroadcast(sendIntent);
+                Connectivity.get(MainActivitytwo.this).sendBroadcast(sendIntent);
+                mEditText.setText(null);
+            }
+        });
 
     }
 
@@ -253,7 +283,64 @@ public class MainActivitytwo extends AppCompatActivity {
 
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(receiver, new IntentFilter(ACTION_SEND));
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
+    }
+
+    public void sendClicked(View view) {
+        Intent sendIntent = new Intent(ACTION_SEND);
+        sendIntent.setPackage("com.vuzix.connectivitysdksample");
+        sendIntent.putExtra(EXTRA_TEXT, mEditText.getText().toString());
+        //sendBroadcast(sendIntent);
+        Connectivity.get(this).sendBroadcast(sendIntent);
+        mEditText.setText(null);
+    }
+
+    public void getRemoteDeviceModelClicked(View view) {
+        Connectivity connectivity = Connectivity.get(this);
+        Device device = connectivity.getDevice();
+        if (device != null) {
+            Intent getIntent = new Intent(ACTION_GET);
+            getIntent.setPackage("com.vuzix.connectivitysdksample");
+            connectivity.sendOrderedBroadcast(device, getIntent, new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String model = getResultData();
+                    if (model != null) {
+                        Toast.makeText(context, model, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Connectivity.get(context).verify(intent, "com.vuzix.connectivitysdksample")) {
+                String text = intent.getStringExtra(EXTRA_TEXT);
+
+                if (text != null) {
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+
+                }
+                byte[] byteArray =intent.getByteArrayExtra(Image);
+                if(byteArray!=null) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    imageView.setImageBitmap(bitmap);
+                }
+
+            }
+            }
+    };
 
 
 
