@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#31D6C7</color>
+    <color name="dialogcolour1">#00456A</color>
+    <color name="dialogcolour2">#1F272C</color>
+    <color name="selected">#FFC6C6C6</color>
+    <color name="ratingcolour">#31D6C7</color>
+    <color name="colorPrimaryDark">#31D6C7</color>
+    <color name="colorAccent">#31D6C7</color>
+    <color name="tabunselected">#7DF4EA</color>
+
+</resources>

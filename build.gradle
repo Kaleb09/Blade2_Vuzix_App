@@ -3,7 +3,7 @@
 buildscript {
     repositories {
         google()
-       // mavenCentral()
+        mavenCentral()
         gradlePluginPortal()
         mavenCentral()
         maven { url "https://jitpack.io" }
@@ -20,13 +20,13 @@ buildscript {
 allprojects {
     repositories {
         google()
-      //  mavenCentral()
+        mavenCentral()
         gradlePluginPortal()
         mavenCentral()
         maven { url "https://jitpack.io" }
         jcenter()
     }
-}
+ }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
